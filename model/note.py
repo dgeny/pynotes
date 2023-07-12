@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class Note:
-    __id = None
+    __ident = None
     __caption = ""
     __body = ""
     __date_of_creation = datetime.now()
@@ -31,3 +31,12 @@ class Note:
 
     def equal(self, other:Note) -> bool:
         return (self.__body == other.get_body() and self.__caption == other.get_caption())
+
+    def __repr__(self):
+        return {
+            "id": self.__ident,
+            "caption": self.__caption,
+            "body": self.__body,
+            "date_of_creation": self.__date_of_creation,
+            "date_of_modification": self.__date_of_modification
+        }
