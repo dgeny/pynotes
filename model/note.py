@@ -15,6 +15,12 @@ class Note:
         self.__dt_creation = datetime.now()
         self.__date_of_modification = self.__dt_creation
     
+    def _set_id(self,id):
+        self.__ident = id
+
+    def get_id(self, ident):
+        return self.__ident
+
     def get_body(self):
         return self.__body
 
@@ -25,7 +31,7 @@ class Note:
     def get_caption(self):
         return self.__caption
 
-    def get_caption(self, caption):
+    def set_caption(self, caption):
         self.__caption = caption
         self.__date_of_modification = datetime.now()
 
