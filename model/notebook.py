@@ -36,6 +36,13 @@ class Notebook:
         else:
             raise IndexError
 
+    def import_note(self, note_dict):
+        self.__notes.append(Note(
+            note_dict["id"], note_dict["caption"], note_dict["body"],
+            note_dict["date_of_creation"], note_dict["date_of_modification"]
+        ))
+        self.__reindex()
+
     def __reindex(self) -> None:
         for ident in range(len(self.__notes) - 1):
             self.__notes[ident]._set_id(ident)

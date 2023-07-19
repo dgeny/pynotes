@@ -46,7 +46,7 @@ class Note:
             self.__ident, self.__caption, self.__body,
             self.__date_of_creation, self.__date_of_modification
         )
-    
+
     def to_dict(self):
         return {
             "id": self.__ident,
