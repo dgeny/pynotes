@@ -1,8 +1,7 @@
-import absview
-import sys
+from view.absview import Absview
 
 
-class SimpleConsoleView(absview.Absview):
+class SimpleConsoleView(Absview):
 
     def __init__(self, actions):
         self.actions = actions
@@ -14,9 +13,8 @@ class SimpleConsoleView(absview.Absview):
         tinput = input()
         record["caption"] = tinput
         print('-' * 75)
-        print("Введите заметку: ")
-        tinput = input()
-        record["body"] = tinput
+        print("Введите заметку. Для сохранения введите Ctrl-D (Ctrl-Z в Windows ):")
+        record["body"] = self.__multiline_input()
         return record
 
     def show_record(self, record: dict) -> None:
@@ -37,12 +35,16 @@ class SimpleConsoleView(absview.Absview):
             record["date_of_creation"],
             record["date_of_modification"]))
         print('-' * 75)
-        print("Заголовок [ввод оставлляет предыдущее значение]:" + record["caption"])
+        print(
+            "Заголовок [Enter оставлляет предыдущее значение]:"
+            + record["caption"])
         tinput = input()
         record["caption"] = tinput if tinput != "" else record["caption"]
         print('-' * 75)
-        print("Заметка [ввод оставлляет предыдущее значение]: " + record["body"])
-        tinput = input()
+        print(
+            "Заметка. Для сохранения введите Ctrl-D (Ctrl-Z в Windows):"
+            "[оставьте пустым для предыдущего значения]:\n" + record["body"])
+        tinput = self.__multiline_input().strip()
         record["body"] = tinput if tinput != "" else record["body"]
         return record
 
@@ -112,66 +114,12 @@ class SimpleConsoleView(absview.Absview):
         print("\033[H\033[J", end="")
         print("  ".join(self.actions))
 
-
-if __name__ == "__main__":
-    # import sys
-    sys.path.append(
-        '/home/tpuser/work/education/checkpoints/python_notes/pynotes')
-    from model.notebook import Notebook
-    from enum import Enum
-
-    class Actions(Enum):
-        showall = 1,
-
-    supported_actions = [
-        "1. Показать список заметок",
-        "2. Подробнее о заметке",
-        "3. Новая заметка",
-        "4. Редактировать заметку",
-        "5. Удалить заметку",
-        "q. Выход"
-    ]
-    conview = SimpleConsoleView(supported_actions)
-    notes = Notebook()
-    notes.create_note(
-        "Note1\nmy multiline note!. More 30 symbols length."
-        " Very hard to display.",
-        "1"
-    )
-    notes.create_note("Note2", "2")
-    notes.create_note("Note3", "3")
-
-    while True:
-        try:
-            action = conview.get_action()
-            if action == -1:
+    def __multiline_input(self):
+        result = []
+        while True:
+            try:
+                line = input()
+            except EOFError:
                 break
-            elif action == 0:
-                continue
-            elif action == 1:
-                conview.show_notebook(
-                    [{
-                        "id": note.get_id(),
-                        "caption": note.get_caption(),
-                        "body": note.get_body()
-                    } for note in notes]
-                )
-            elif action == 2:
-                conview.show_record(
-                    notes.read_note(conview.select_record()).to_dict())
-            elif action == 3:
-                created = conview.create_record()
-                notes.create_note(created["body"], created["caption"])
-            elif action == 4:
-                updated = conview.update_record(
-                    notes.read_note(conview.select_record()).to_dict())
-                notes.update_note(
-                    updated["id"], updated["caption"], updated["body"])
-            elif action == 5:
-                deleting = conview.select_record()
-                if conview.delete_record(deleting):
-                    notes.delete_note(deleting)
-            else:
-                continue
-        except IndexError:
-            print("Введен несуществующий номер заметки")
+            result.append(line)
+        return '\n'.join(result)
