@@ -8,17 +8,17 @@ class Note:
     __date_of_creation = datetime.now()
     __date_of_modification = datetime.now()
 
-    def __init__(self, ident, caption, body) -> None:
+    def __init__(self, ident, caption, body, dt_c=None, dt_m=None) -> None:
         self.__ident = ident
         self.__caption = caption
         self.__body = body
-        self.__dt_creation = datetime.now()
-        self.__date_of_modification = self.__dt_creation
-    
-    def _set_id(self,id):
+        self.__dt_creation = dt_c if dt_c else datetime.now()
+        self.__date_of_modification = dt_m if dt_m else self.__dt_creation
+
+    def _set_id(self, id):
         self.__ident = id
 
-    def get_id(self, ident):
+    def get_id(self):
         return self.__ident
 
     def get_body(self):
@@ -27,7 +27,7 @@ class Note:
     def set_body(self, body):
         self.__body = body
         self.__date_of_modification = datetime.now()
-    
+
     def get_caption(self):
         return self.__caption
 
@@ -35,10 +35,19 @@ class Note:
         self.__caption = caption
         self.__date_of_modification = datetime.now()
 
-    def equal(self, other:Note) -> bool:
-        return (self.__body == other.get_body() and self.__caption == other.get_caption())
+    def equal(self, other) -> bool:
+        return (self.__body == other.get_body()
+                and self.__caption == other.get_caption())
 
-    def __repr__(self):
+    def __str__(self):
+        return str.format(
+            '{{"id":"{}","caption":"{}","body":"{}","date_of_creation":"{}",'
+            '"date_of_modification":"{}" }}',
+            self.__ident, self.__caption, self.__body,
+            self.__date_of_creation, self.__date_of_modification
+        )
+    
+    def to_dict(self):
         return {
             "id": self.__ident,
             "caption": self.__caption,
