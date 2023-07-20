@@ -1,6 +1,7 @@
 from model import notebook
 import json
 from abc import ABC, abstractmethod
+import datetime
 
 
 class BasePresenter(ABC):
@@ -18,13 +19,15 @@ class BasePresenter(ABC):
         except FileNotFoundError:
             # TODO: logfile error record
             print("Ошибка импорта: файл {} не найден".format(path))
+        except json.JSONDecodeError:
+            print("Ошибка импорта: файл {} сохранен в неверном формате".format(path))
 
     def export_notebook(self, path):
         try:
             with open(path, mode="w") as fd:
                 json.dump(
                     [note.to_dict() for note in self.notebook],
-                    fd)
+                    fd, default=self.__serializer)
         except FileNotFoundError:
             # TODO: logfile error record
             print("Ошибка экспорта: файл {} не найден".format(path))
@@ -54,3 +57,7 @@ class BasePresenter(ABC):
     @abstractmethod
     def _action_process(self, action):
         pass
+
+    def __serializer(self, o):
+        if isinstance(o, (datetime.date, datetime.datetime)):
+            return o.isoformat()
