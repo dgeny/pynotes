@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from presenter.simple_console_presenter import SimpleConsolePresenter
 import argparse
-from os import path 
+from os import path
 
 
 def main(dbpath):
@@ -24,6 +24,7 @@ if __name__ == '__main__':
                            'в период обучения в GeekBrains')
     parser.add_argument(
         '--db', type=str, help='путь к файлу с сохраненными заметками '
-                               '[по умолчанию - notes.json в текущем каталоге]')
+                               '[по умолчанию - notes.json в текущем каталоге]'
+        )
     args = parser.parse_args()
     main(args.db if args.db else "notes.json")

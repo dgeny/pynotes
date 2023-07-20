@@ -20,7 +20,8 @@ class BasePresenter(ABC):
             # TODO: logfile error record
             print("Ошибка импорта: файл {} не найден".format(path))
         except json.JSONDecodeError:
-            print("Ошибка импорта: файл {} сохранен в неверном формате".format(path))
+            print("Ошибка импорта: файл {} сохранен в неверном "
+                  "формате".format(path))
 
     def export_notebook(self, path):
         try:
