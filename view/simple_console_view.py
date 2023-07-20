@@ -13,7 +13,8 @@ class SimpleConsoleView(Absview):
         tinput = input()
         record["caption"] = tinput
         print('-' * 75)
-        print("Введите заметку. Для сохранения введите Ctrl-D (Ctrl-Z в Windows ):")
+        print("Введите заметку. Для сохранения введите "
+              "Ctrl-D (Ctrl-Z в Windows ):")
         record["body"] = self.__multiline_input()
         return record
 
@@ -67,11 +68,11 @@ class SimpleConsoleView(Absview):
     def get_action(self) -> int:
         key = input('Введите действие: ')
         if key == 'q':
-            return -1
+            return 0
         elif key.isdigit():
             return int(key)
         else:
-            return 0
+            return -1
 
     def __printTable(self, notebook):
         myList = [["id", "Caption", "Body"]]  # header
