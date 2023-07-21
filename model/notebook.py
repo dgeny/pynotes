@@ -1,4 +1,5 @@
 from model.note import Note
+from datetime import datetime
 
 
 class Notebook:
@@ -42,6 +43,34 @@ class Notebook:
             note_dict["date_of_creation"], note_dict["date_of_modification"]
         ))
         self.__reindex()
+
+    def filterby_date(
+            self, date_start=datetime.min, date_end=datetime.max, date_type=2):
+        if not date_start:
+            date_start = datetime.min
+        if not date_end:
+            date_end = datetime.now()
+        result = list()
+        if date_type == 1:  # date_of_creation
+            result = [
+                note for note in self
+                if note.get_date_of_creation() >= date_start and
+                note.get_date_of_creation() <= date_end
+            ]
+        elif date_type == 2:  # date_of_modification
+            result = [
+                note for note in self
+                if note.get_date_of_modification() >= date_start and
+                note.get_date_of_modification() <= date_end
+            ]
+        else:
+            result = [
+                note for note in self
+                if (note.get_date_of_modification() >= date_start or
+                    note.get_date_of_creation() >= date_start) and
+                note.get_date_of_modification() <= date_end
+            ]
+        return result
 
     def __reindex(self) -> None:
         for ident in range(len(self.__notes) - 1):

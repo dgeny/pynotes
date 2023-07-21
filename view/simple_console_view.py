@@ -50,7 +50,7 @@ class SimpleConsoleView(Absview):
         return record
 
     def delete_record(self, ident: int) -> bool:
-        key = input('Подтвердите удаление записи [{}]: '.format(ident))
+        key = input('Подтвердите удаление записи [введите {}]: '.format(ident))
         return key.isdigit() and int(key) == ident
 
     def show_notebook(self, nb: list) -> None:
@@ -75,11 +75,14 @@ class SimpleConsoleView(Absview):
             return -1
 
     def filterby_date(self):
-        return input('Введите начальную дату[необязательно, формат - '
-                     '2023-07-01]: '),
-        input('Введите конечную дату[необязательно, формат - 2023-07-01]: '),
-        input('Фильтровать по дате создания(1), дате модификации(2), '
-              'обеим датам(3, по умолчанию):\n')
+        dt_start = input(
+            'Введите начальную дату[необязательно, формат - 2023-07-01]: ')
+        dt_end = input(
+            'Введите конечную дату[необязательно, формат - 2023-07-01]: ')
+        filter_t = input(
+            'Фильтровать по дате создания(1), дате модификации(2), '
+            'обеим датам(3, по умолчанию):\n')
+        return (dt_start, dt_end, filter_t)
 
     def __printTable(self, notebook):
         myList = [["id", "Caption", "Body"]]  # header
