@@ -1,7 +1,7 @@
 from model import notebook
 import json
 from abc import ABC, abstractmethod
-import datetime
+from datetime import datetime, date
 
 
 class BasePresenter(ABC):
@@ -13,7 +13,7 @@ class BasePresenter(ABC):
     def import_notebook(self, path):
         try:
             with open(path, mode='r') as fd:
-                notes = json.load(fd)
+                notes = json.load(fd, object_hook=self.__deserializer)
                 for note in notes:
                     self.notebook.import_note(note)
         except FileNotFoundError:
@@ -60,5 +60,16 @@ class BasePresenter(ABC):
         pass
 
     def __serializer(self, o):
-        if isinstance(o, (datetime.date, datetime.datetime)):
-            return o.isoformat()
+        if isinstance(o, (date, datetime)):
+            return o.strftime('%Y-%m-%d %H:%M:%S')
+
+    def __deserializer(self, o):
+        for (key, value) in o.items():
+            try:
+                o[key] = datetime.strptime(
+                    value, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                pass
+            except TypeError:
+                pass
+        return o
