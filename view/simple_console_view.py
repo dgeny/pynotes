@@ -9,48 +9,48 @@ class SimpleConsoleView(Absview):
 
     def create_record(self):
         record = dict()
-        print("Введите заголовок заметки:")
+        print('Введите заголовок заметки:')
         tinput = input()
         record["caption"] = tinput
         print('-' * 75)
-        print("Введите заметку. Для сохранения введите "
-              "Ctrl-D (Ctrl-Z в Windows ):")
+        print('Введите заметку. Для сохранения введите '
+              'Ctrl-D (Ctrl-Z в Windows ):')
         record["body"] = self.__multiline_input()
         return record
 
     def show_record(self, record: dict) -> None:
         self.__prompt()
-        print("Note #" + str(record["id"]))
+        print('Заметка №' + str(record["id"]))
         print(str.format(
-            "Creation date:{}\tModification date:{}",
+            'Дата создания:{}\tДата изменения:{}',
             record["date_of_creation"],
             record["date_of_modification"]))
         print('-' * 75)
-        print("Caption:\t" + record["caption"])
+        print('Заголовок:\t' + record["caption"])
         print('-' * 75)
         print(record["body"])
 
     def update_record(self, record: dict) -> dict:
         print(str.format(
-            "Дата создания:{}\tДата изменения:{}",
+            'Дата создания:{}\tДата изменения:{}',
             record["date_of_creation"],
             record["date_of_modification"]))
         print('-' * 75)
         print(
-            "Заголовок [Enter оставлляет предыдущее значение]:"
+            'Заголовок [Enter оставлляет предыдущее значение]:'
             + record["caption"])
         tinput = input()
         record["caption"] = tinput if tinput != "" else record["caption"]
         print('-' * 75)
         print(
-            "Заметка. Для сохранения введите Ctrl-D (Ctrl-Z в Windows):"
-            "[оставьте пустым для предыдущего значения]:\n" + record["body"])
+            'Заметка. Для сохранения введите Ctrl-D (Ctrl-Z в Windows):'
+            '[оставьте пустым для предыдущего значения]:\n' + record["body"])
         tinput = self.__multiline_input().strip()
         record["body"] = tinput if tinput != "" else record["body"]
         return record
 
     def delete_record(self, ident: int) -> bool:
-        key = input("Подтвердите удаление записи [{}]: ".format(ident))
+        key = input('Подтвердите удаление записи [{}]: '.format(ident))
         return key.isdigit() and int(key) == ident
 
     def show_notebook(self, nb: list) -> None:
@@ -73,6 +73,13 @@ class SimpleConsoleView(Absview):
             return int(key)
         else:
             return -1
+
+    def filterby_date(self):
+        return input('Введите начальную дату[необязательно, формат - '
+                     '2023-07-01]: '),
+        input('Введите конечную дату[необязательно, формат - 2023-07-01]: '),
+        input('Фильтровать по дате создания(1), дате модификации(2), '
+              'обеим датам(3, по умолчанию):\n')
 
     def __printTable(self, notebook):
         myList = [["id", "Caption", "Body"]]  # header
