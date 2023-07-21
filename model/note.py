@@ -2,17 +2,12 @@ from datetime import datetime
 
 
 class Note:
-    __ident = None
-    __caption = ""
-    __body = ""
-    __date_of_creation = datetime.now()
-    __date_of_modification = datetime.now()
 
     def __init__(self, ident, caption, body, dt_c=None, dt_m=None) -> None:
         self.__ident = ident
         self.__caption = caption
         self.__body = body
-        self.__dt_creation = dt_c if dt_c else datetime.now()
+        self.__date_of_creation = dt_c if dt_c else datetime.now()
         self.__date_of_modification = dt_m if dt_m else self.__dt_creation
 
     def _set_id(self, id):
@@ -34,6 +29,12 @@ class Note:
     def set_caption(self, caption):
         self.__caption = caption
         self.__date_of_modification = datetime.now()
+
+    def get_date_of_creation(self):
+        return self.__date_of_creation
+
+    def get_date_of_modification(self):
+        return self.__date_of_modification
 
     def equal(self, other) -> bool:
         return (self.__body == other.get_body()
